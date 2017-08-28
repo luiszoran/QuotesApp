@@ -6,9 +6,12 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>{{quoteGroup.category | uppercase}}</ion-title>
-  </ion-navbar>
+    <ion-navbar start>
+      <button ion-button color="primary" menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      <ion-title>{{quoteGroup.category | uppercase}}</ion-title>
+    </ion-navbar>
 
 </ion-header>
 

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController } from 'ionic-angular';
+import { IonicPage, ModalController, MenuController } from 'ionic-angular';
 import { Quote } from "../../data/quotes.interface";
 import { QuotesService } from "../../services/quotes";
+import { SettingsService } from "../../services/settings";
 import { QuotePage } from "../quote/quote";
 
 @IonicPage()
@@ -12,8 +13,7 @@ import { QuotePage } from "../quote/quote";
 export class FavoriteQuotesPage {
     quotes: Quote[];
 
-  constructor(private quotesService: QuotesService, private modalCtrl: ModalController) {
-
+  constructor(private quotesService: QuotesService, private modalCtrl: ModalController, private settingsService: SettingsService) {
   }
 
   ionViewWillEnter() {
@@ -25,12 +25,20 @@ export class FavoriteQuotesPage {
       modal.present();
       modal.onDidDismiss((remove: boolean) => {
           if (remove)
-              this.quotesService.removeQuoteFromFavorites(quote);
-          this.quotes = this.quotesService.getFavoriteQuotes();
-          const position = this.quotes.findIndex((quoteEl: Quote) => {
-              return quoteEl.id == quote.id;
-          });
-          this.quotes.splice(position, 1);
+              this.onRemoveFromFavorites(quote);
       });
+  }
+
+  onRemoveFromFavorites(quote: Quote) {
+      this.quotesService.removeQuoteFromFavorites(quote);
+      this.quotes = this.quotesService.getFavoriteQuotes();
+      const position = this.quotes.findIndex((quoteEl: Quote) => {
+          return quoteEl.id == quote.id;
+      });
+      this.quotes.splice(position, 1);
+  }
+
+  getBackgroundSetting() {
+      return this.settingsService.getCurrentSetting() ? "quoteBackground" : "altQuoteBackground";
   }
 }
